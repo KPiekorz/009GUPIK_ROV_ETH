@@ -28,6 +28,10 @@
 /* USER CODE BEGIN Includes */     
 
 #include "lwip.h"
+#include "lwip/opt.h"
+#include "lwip/arch.h"
+#include "lwip/api.h"
+#include <string.h>
 
 /* USER CODE END Includes */
 
@@ -131,12 +135,14 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void const * argument)
 {
   /* init code for LWIP */
-  MX_LWIP_Init();
+//  MX_LWIP_Init();
   /* USER CODE BEGIN StartDefaultTask */
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+
+	  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+	  osDelay(1000);
   }
   osThreadTerminate(NULL);
   /* USER CODE END StartDefaultTask */
@@ -149,13 +155,67 @@ void StartDefaultTask(void const * argument)
 /* task to hold tcp communication */
 void vTaskEthTCPCommunication(void * argument){
 
+	struct netconn *conn, *newconn;
+	err_t err, accept_err;
+	struct netbuf *buf;
+	void *data;
+	uint16_t len;
+	err_t recv_err;
 
 	for(;;){
 
 
+		/* Infinite loop */
+		/* Create a new connection identifier. */
+		conn = netconn_new(NETCONN_TCP);
+		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+
+		if (conn != NULL) {
+
+			/* Bind connection to well known port number. */
+			err = netconn_bind(conn, NULL, 80);
+
+			if (err == ERR_OK) {
+
+				/* Tell connection to go into listening mode. */
+				netconn_listen(conn);
+
+				while (1) {
+					/* Grab new connection. */
+					accept_err = netconn_accept(conn, &newconn);
+					HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+					/* Process the new connection. */
+					if (accept_err == ERR_OK) {
+
+						while ((recv_err = netconn_recv(newconn, &buf))
+								== ERR_OK) {
+
+							do {
+								netbuf_data(buf, &data, &len);
+								netconn_write(newconn, data, len, NETCONN_COPY);
+							} while (netbuf_next(buf) >= 0);
+
+							netbuf_delete(buf);
+
+						}
+
+						/* Close connection and discard connection identifier. */
+						netconn_close(newconn);
+						netconn_delete(newconn);
+					}
+				}
+
+			} else {
+				netconn_delete(newconn);
+			}
+
+		}
+
 
 	}
+
 	vTaskDelete(NULL);
+
 }
 
 /* USER CODE END Application */

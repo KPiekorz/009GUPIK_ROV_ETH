@@ -82,16 +82,13 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
  ../../Middlewares/Third_Party/LwIP/src/include/lwip/prot/etharp.h \
  ../../Middlewares/Third_Party/LwIP/src/include/netif/ethernet.h \
  ../../Middlewares/Third_Party/LwIP/src/include/lwip/dhcp.h \
- ../../Middlewares/Third_Party/LwIP/src/include/lwip/udp.h \
- ../../Middlewares/Third_Party/LwIP/src/include/lwip/ip.h \
- ../../Middlewares/Third_Party/LwIP/src/include/lwip/ip6.h \
- ../../Middlewares/Third_Party/LwIP/src/include/lwip/prot/ip.h \
- ../../Middlewares/Third_Party/LwIP/src/include/lwip/prot/udp.h \
  ../../Middlewares/Third_Party/LwIP/src/include/lwip/timeouts.h \
  ../../Middlewares/Third_Party/LwIP/src/include/lwip/sys.h \
  ../../Middlewares/Third_Party/LwIP/system/arch/sys_arch.h \
  ../LWIP/Target/ethernetif.h \
- ../../Middlewares/Third_Party/LwIP/src/include/lwip/tcpip.h
+ ../../Middlewares/Third_Party/LwIP/src/include/lwip/tcpip.h \
+ ../../Middlewares/Third_Party/LwIP/src/include/lwip/api.h \
+ ../../Middlewares/Third_Party/LwIP/src/include/lwip/netbuf.h
 
 ../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 
@@ -259,16 +256,6 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
 
 ../../Middlewares/Third_Party/LwIP/src/include/lwip/dhcp.h:
 
-../../Middlewares/Third_Party/LwIP/src/include/lwip/udp.h:
-
-../../Middlewares/Third_Party/LwIP/src/include/lwip/ip.h:
-
-../../Middlewares/Third_Party/LwIP/src/include/lwip/ip6.h:
-
-../../Middlewares/Third_Party/LwIP/src/include/lwip/prot/ip.h:
-
-../../Middlewares/Third_Party/LwIP/src/include/lwip/prot/udp.h:
-
 ../../Middlewares/Third_Party/LwIP/src/include/lwip/timeouts.h:
 
 ../../Middlewares/Third_Party/LwIP/src/include/lwip/sys.h:
@@ -278,3 +265,7 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
 ../LWIP/Target/ethernetif.h:
 
 ../../Middlewares/Third_Party/LwIP/src/include/lwip/tcpip.h:
+
+../../Middlewares/Third_Party/LwIP/src/include/lwip/api.h:
+
+../../Middlewares/Third_Party/LwIP/src/include/lwip/netbuf.h:

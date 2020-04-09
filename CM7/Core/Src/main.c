@@ -121,6 +121,8 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
+  MPU_Config();
+
   /* USER CODE END 1 */
   /* USER CODE BEGIN Boot_Mode_Sequence_0 */
     int32_t timeout; 
@@ -179,6 +181,9 @@ Error_Handler();
   MX_USART3_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
   /* USER CODE BEGIN 2 */
+
+  MX_LWIP_Init();
+
 
   /* USER CODE END 2 */
 
