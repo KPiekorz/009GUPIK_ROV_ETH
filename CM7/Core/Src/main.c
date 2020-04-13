@@ -121,7 +121,7 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
-  MPU_Config();
+	MPU_Config();
 
   /* USER CODE END 1 */
   /* USER CODE BEGIN Boot_Mode_Sequence_0 */
@@ -183,7 +183,6 @@ Error_Handler();
   /* USER CODE BEGIN 2 */
 
   MX_LWIP_Init();
-
 
   /* USER CODE END 2 */
 

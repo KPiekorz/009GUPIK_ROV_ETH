@@ -61,6 +61,8 @@ osThreadId defaultTaskHandle;
 
 /* task to hold tcp communication */
 void vTaskEthTCPCommunication(void * argument);
+
+void vTaskControlTask(void * argument);
    
 /* USER CODE END FunctionPrototypes */
 
@@ -120,6 +122,7 @@ void MX_FREERTOS_Init(void) {
   /* add threads, ... */
 
   xTaskCreate(vTaskEthTCPCommunication, "vTaskEthTCPCommunication", 1000, NULL, 1, NULL);
+  xTaskCreate(vTaskControlTask, "vTaskControlTask", 1000, NULL, 1, NULL);
 
   /* USER CODE END RTOS_THREADS */
 
@@ -135,13 +138,12 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void const * argument)
 {
   /* init code for LWIP */
-//  MX_LWIP_Init();
+  MX_LWIP_Init();
   /* USER CODE BEGIN StartDefaultTask */
   /* Infinite loop */
   for(;;)
   {
 
-	  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 	  osDelay(1000);
   }
   osThreadTerminate(NULL);
@@ -151,6 +153,16 @@ void StartDefaultTask(void const * argument)
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
      
+
+void vTaskControlTask(void * argument){
+
+
+	for(;;){
+
+		vTaskDelay(pdMS_TO_TICKS(1000));
+
+	}
+}
 
 /* task to hold tcp communication */
 void vTaskEthTCPCommunication(void * argument){
@@ -181,14 +193,17 @@ void vTaskEthTCPCommunication(void * argument){
 				netconn_listen(conn);
 
 				while (1) {
+
 					/* Grab new connection. */
 					accept_err = netconn_accept(conn, &newconn);
 					HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+
+
+
 					/* Process the new connection. */
 					if (accept_err == ERR_OK) {
 
-						while ((recv_err = netconn_recv(newconn, &buf))
-								== ERR_OK) {
+						while ((recv_err = netconn_recv(newconn, &buf)) == ERR_OK) {
 
 							do {
 								netbuf_data(buf, &data, &len);
