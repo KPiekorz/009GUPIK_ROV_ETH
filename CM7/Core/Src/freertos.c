@@ -121,8 +121,9 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
 
-  xTaskCreate(vTaskEthTCPCommunication, "vTaskEthTCPCommunication", 1000, NULL, 1, NULL);
-  xTaskCreate(vTaskControlTask, "vTaskControlTask", 1000, NULL, 1, NULL);
+  xTaskCreate(vTaskEthTCPCommunication, "vTaskEthTCPCommunication", 5000, NULL, 1, NULL);
+
+//  xTaskCreate(vTaskControlTask, "vTaskControlTask", 3000, NULL, 1, NULL);
 
   /* USER CODE END RTOS_THREADS */
 
@@ -138,7 +139,7 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void const * argument)
 {
   /* init code for LWIP */
-  MX_LWIP_Init();
+//  MX_LWIP_Init();
   /* USER CODE BEGIN StartDefaultTask */
   /* Infinite loop */
   for(;;)
