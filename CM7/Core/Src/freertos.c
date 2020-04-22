@@ -177,6 +177,7 @@ void vTaskEthTCPCommunication(void * argument){
 
 	for(;;){
 
+		// hej zaczynamy implementacje komunikacji
 
 		/* Infinite loop */
 		/* Create a new connection identifier. */

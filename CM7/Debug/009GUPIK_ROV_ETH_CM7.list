@@ -722,8 +722,8 @@ void vTaskEthTCPCommunication(void * argument){
  8000802:	b08a      	sub	sp, #40	; 0x28
  8000804:	af02      	add	r7, sp, #8
  8000806:	6078      	str	r0, [r7, #4]
-	for(;;){
 
+		// hej zaczynamy implementacje komunikacji
 
 		/* Infinite loop */
 		/* Create a new connection identifier. */
