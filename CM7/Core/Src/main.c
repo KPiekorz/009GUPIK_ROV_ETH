@@ -51,6 +51,8 @@
 
 /* USER CODE BEGIN PV */
 
+char uart3_send[200];
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -183,8 +185,6 @@ Error_Handler();
   MX_USART3_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
   /* USER CODE BEGIN 2 */
-
-  HAL_Delay(10000);
 
   MX_LWIP_Init();
 

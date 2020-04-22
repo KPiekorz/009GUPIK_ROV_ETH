@@ -88,7 +88,8 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
  ../LWIP/Target/ethernetif.h \
  ../../Middlewares/Third_Party/LwIP/src/include/lwip/tcpip.h \
  ../../Middlewares/Third_Party/LwIP/src/include/lwip/api.h \
- ../../Middlewares/Third_Party/LwIP/src/include/lwip/netbuf.h
+ ../../Middlewares/Third_Party/LwIP/src/include/lwip/netbuf.h \
+ ../Core/Inc/usart.h ../Core/Inc/main.h
 
 ../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 
@@ -269,3 +270,7 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
 ../../Middlewares/Third_Party/LwIP/src/include/lwip/api.h:
 
 ../../Middlewares/Third_Party/LwIP/src/include/lwip/netbuf.h:
+
+../Core/Inc/usart.h:
+
+../Core/Inc/main.h:

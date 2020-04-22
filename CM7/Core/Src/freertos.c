@@ -33,6 +33,10 @@
 #include "lwip/api.h"
 #include <string.h>
 
+#include "usart.h"
+#include <string.h>
+#include <stdlib.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -53,16 +57,20 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
 
+struct netconn *newconn;
+
+extern char uart3_send[200];
+
 /* USER CODE END Variables */
 osThreadId defaultTaskHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
 
-/* task to hold tcp communication */
-void vTaskEthTCPCommunication(void * argument);
 
-void vTaskControlTask(void * argument);
+void vTaskEthReceiveCommand(void * argument);
+void vTaskEthSendData(void * argument);
+
    
 /* USER CODE END FunctionPrototypes */
 
@@ -121,9 +129,9 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
 
-  xTaskCreate(vTaskEthTCPCommunication, "vTaskEthTCPCommunication", 5000, NULL, 1, NULL);
+  xTaskCreate(vTaskEthReceiveCommand, "TaskEthReceiveCommand", 3000, NULL, 1, NULL);
 
-//  xTaskCreate(vTaskControlTask, "vTaskControlTask", 3000, NULL, 1, NULL);
+  xTaskCreate(vTaskEthSendData, "TaskEthSendData", 1000, NULL, 1, NULL);
 
   /* USER CODE END RTOS_THREADS */
 
@@ -155,20 +163,10 @@ void StartDefaultTask(void const * argument)
 /* USER CODE BEGIN Application */
      
 
-void vTaskControlTask(void * argument){
-
-
-	for(;;){
-
-		vTaskDelay(pdMS_TO_TICKS(1000));
-
-	}
-}
-
 /* task to hold tcp communication */
-void vTaskEthTCPCommunication(void * argument){
+void vTaskEthReceiveCommand(void * argument){
 
-	struct netconn *conn, *newconn;
+	struct netconn *conn;
 	err_t err, accept_err;
 	struct netbuf *buf;
 	void *data;
@@ -177,17 +175,14 @@ void vTaskEthTCPCommunication(void * argument){
 
 	for(;;){
 
-		// hej zaczynamy implementacje komunikacji
-
 		/* Infinite loop */
 		/* Create a new connection identifier. */
 		conn = netconn_new(NETCONN_TCP);
-		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
 
 		if (conn != NULL) {
 
 			/* Bind connection to well known port number. */
-			err = netconn_bind(conn, NULL, 80);
+			err = netconn_bind(conn, NULL, 4242);
 
 			if (err == ERR_OK) {
 
@@ -198,9 +193,6 @@ void vTaskEthTCPCommunication(void * argument){
 
 					/* Grab new connection. */
 					accept_err = netconn_accept(conn, &newconn);
-					HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
-
-
 
 					/* Process the new connection. */
 					if (accept_err == ERR_OK) {
@@ -208,8 +200,16 @@ void vTaskEthTCPCommunication(void * argument){
 						while ((recv_err = netconn_recv(newconn, &buf)) == ERR_OK) {
 
 							do {
+
 								netbuf_data(buf, &data, &len);
-								netconn_write(newconn, data, len, NETCONN_COPY);
+
+								/* receive command from control station */
+								sprintf(uart3_send, "Eth tcp received data: %s \n\r", (char*) data);
+								HAL_UART_Transmit(&huart3, (uint8_t*) uart3_send, strlen(uart3_send), HAL_MAX_DELAY);
+
+								/* parse received command and control ROV */
+
+
 							} while (netbuf_next(buf) >= 0);
 
 							netbuf_delete(buf);
@@ -234,6 +234,34 @@ void vTaskEthTCPCommunication(void * argument){
 	vTaskDelete(NULL);
 
 }
+
+
+void vTaskEthSendData(void * argument){
+
+	void *tcpeth_send_data = "hello eth h7";
+	err_t tcp_send_data_status;
+
+	for(;;){
+
+		/* queue which contain dato to be send */
+
+
+		/* send data packet with netconn_write function */
+
+
+		tcp_send_data_status = netconn_write(newconn, tcpeth_send_data, strlen(tcpeth_send_data), NETCONN_COPY);
+
+		sprintf(uart3_send, "Netconn write status: %d\n\r", tcp_send_data_status);
+		HAL_UART_Transmit(&huart3, (uint8_t*) uart3_send, strlen(uart3_send), HAL_MAX_DELAY);
+
+		HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+		vTaskDelay(pdMS_TO_TICKS(1000));
+	}
+
+	vTaskDelete(NULL);
+
+}
+
 
 /* USER CODE END Application */
 
