@@ -36,6 +36,7 @@
 #include "usart.h"
 #include <string.h>
 #include <stdlib.h>
+#include "eth_comm.h"
 
 /* USER CODE END Includes */
 
@@ -166,12 +167,16 @@ void StartDefaultTask(void const * argument)
 /* task to hold tcp communication */
 void vTaskEthReceiveCommand(void * argument){
 
+	/* tcp connection variable */
 	struct netconn *conn;
 	err_t err, accept_err;
 	struct netbuf *buf;
 	void *data;
 	uint16_t len;
 	err_t recv_err;
+
+	/* tcp packet struct */
+	Eth_Packet tcp_command;
 
 	for(;;){
 
@@ -201,14 +206,17 @@ void vTaskEthReceiveCommand(void * argument){
 
 							do {
 
+								/* receive command from control station */
 								netbuf_data(buf, &data, &len);
 
-								/* receive command from control station */
-								sprintf(uart3_send, "Eth tcp received data: %s \n\r", (char*) data);
-								HAL_UART_Transmit(&huart3, (uint8_t*) uart3_send, strlen(uart3_send), HAL_MAX_DELAY);
+//								char *array;
+//								array = (char*) data;
+//
+//								char c1 = *(array+5);
+//								char c2 = *(array+6);
 
-								/* parse received command and control ROV */
-
+								/* parse received command that control ROV */
+								parse_eth_command((char *) data, len, &tcp_command);
 
 							} while (netbuf_next(buf) >= 0);
 
@@ -238,7 +246,11 @@ void vTaskEthReceiveCommand(void * argument){
 
 void vTaskEthSendData(void * argument){
 
-	void *tcpeth_send_data = "hello eth h7";
+//	void *tcpeth_send_data = "hello eth h7";
+	uint8_t tcpeth_send_data[10];
+	tcpeth_send_data[0] = 0x01;
+	tcpeth_send_data[1] = 0x30;
+	tcpeth_send_data[3] = '\0';
 	err_t tcp_send_data_status;
 
 	for(;;){
