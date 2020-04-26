@@ -209,12 +209,6 @@ void vTaskEthReceiveCommand(void * argument){
 								/* receive command from control station */
 								netbuf_data(buf, &data, &len);
 
-//								char *array;
-//								array = (char*) data;
-//
-//								char c1 = *(array+5);
-//								char c2 = *(array+6);
-
 								/* parse received command that control ROV */
 								parse_eth_command((char *) data, len, &tcp_command);
 
@@ -246,13 +240,6 @@ void vTaskEthReceiveCommand(void * argument){
 
 void vTaskEthSendData(void * argument){
 
-//	void *tcpeth_send_data = "hello eth h7";
-//	uint8_t tcpeth_send_data[10];
-//	tcpeth_send_data[0] = 0x01;
-//	tcpeth_send_data[1] = 0x30;
-//	tcpeth_send_data[3] = '\0';
-
-
 	// status of netconn send
 	err_t tcp_send_data_status;
 
@@ -278,6 +265,7 @@ void vTaskEthSendData(void * argument){
 
 		/* send data packet with netconn_write function */
 		tcp_send_data_status = netconn_write(newconn, eth_packet_data, eth_packet_data_len, NETCONN_COPY);
+
 
 		sprintf(uart3_send, "Netconn write status: %s \n\r", eth_packet_data);
 		HAL_UART_Transmit(&huart3, (uint8_t*) uart3_send, strlen(uart3_send), HAL_MAX_DELAY);

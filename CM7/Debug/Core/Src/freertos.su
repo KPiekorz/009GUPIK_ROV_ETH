@@ -2,4 +2,4 @@ freertos.c:90:6:vApplicationGetIdleTaskMemory	24	static
 freertos.c:104:6:MX_FREERTOS_Init	56	static
 freertos.c:148:6:StartDefaultTask	16	static
 freertos.c:168:6:vTaskEthReceiveCommand	72	static
-freertos.c:247:6:vTaskEthSendData	264	static
+freertos.c:241:6:vTaskEthSendData	264	static

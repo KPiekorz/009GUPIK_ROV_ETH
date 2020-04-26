@@ -80,14 +80,15 @@ void convert_eth_packet_to_tcp_array(char * eth_packet_data, uint16_t * eth_data
 	*(eth_packet_data+index) = 's'; index++; checksum += 's';
 	*(eth_packet_data+index) = 'n';	index++; checksum += 'n';
 	*(eth_packet_data+index) = 'p'; index++; checksum += 'p';
-	*(eth_packet_data+index) = eth_packet->pacet_type; index++; checksum += *(eth_packet_data+index);
-	*(eth_packet_data+index) = eth_packet->data_length; index++; checksum += *(eth_packet_data+index);
+	*(eth_packet_data+index) = eth_packet->pacet_type; index++; checksum += *(eth_packet_data+index);  // packet type
+	*(eth_packet_data+index) = eth_packet->data_length; index++; checksum += *(eth_packet_data+index); // packet lenght
 
 	int i;
 	for(i = 0; i<eth_packet->data_length; i++){
-		*(eth_packet_data+index) = eth_packet->data[i]; index++; checksum += *(eth_packet_data+index);
+		*(eth_packet_data+index) = eth_packet->data[i]; index++; checksum += *(eth_packet_data+index); // add data from eth packet
 	}
 
+	/* Calculate checksum of the packet */
 	*(eth_packet_data+index) = (checksum>>8); index++;
 	*(eth_packet_data+index) = (checksum&0xFF); index++;
 
