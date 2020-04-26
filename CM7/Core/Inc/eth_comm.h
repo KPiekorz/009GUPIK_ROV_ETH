@@ -12,6 +12,7 @@
 #include "usart.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 /* parse packet function status */
 enum{
@@ -50,13 +51,12 @@ uint8_t parse_eth_command(char * eth_data, uint16_t eth_data_length, Eth_Packet 
 
 
 /* function to construct send data packet sensor standard */
-void construct_eth_data_packet_sensor_standard(uint8_t eth_packet_data[], Eth_Packet * eth_packet);
+void construct_eth_data_packet_sensor_standard(Eth_Packet * eth_packet); // tu trzeba dopisac pozostale dane wejsciowe
 
-/* function to construct send data packet motor state (speed od the motors) */
-void construct_eth_data_packet_motor_state(uint8_t eth_packet_data[], Eth_Packet * eth_packet);
+/* function to construct send data packet MOTOR STATE (speed od the motors) */
+void construct_eth_data_packet_motor_state(Eth_Packet * eth_packet);
 
-/* calculate checksum of the packet  */
-void calculate_check_sum(uint8_t eth_packet_data[], uint8_t eth_packet_data_length);
-
+/* struct tcp packet to array to be send */
+void convert_eth_packet_to_tcp_array(char * eth_packet_data, uint16_t * eth_data_len, Eth_Packet * eth_packet);
 
 #endif /* INC_ETH_COMM_H_ */

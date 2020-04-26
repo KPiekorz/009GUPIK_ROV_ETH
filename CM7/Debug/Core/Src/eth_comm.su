@@ -1,4 +1,4 @@
-eth_comm.c:15:9:parse_eth_command	32	static
-eth_comm.c:35:6:construct_eth_data_packet_sensor_standard	16	static
-eth_comm.c:50:6:construct_eth_data_packet_motor_state	16	static
-eth_comm.c:59:6:calculate_check_sum	16	static
+eth_comm.c:15:9:parse_eth_command	40	static
+eth_comm.c:57:6:construct_eth_data_packet_sensor_standard	16	static
+eth_comm.c:65:6:construct_eth_data_packet_motor_state	16	static
+eth_comm.c:74:6:convert_eth_packet_to_tcp_array	32	static

@@ -247,24 +247,41 @@ void vTaskEthReceiveCommand(void * argument){
 void vTaskEthSendData(void * argument){
 
 //	void *tcpeth_send_data = "hello eth h7";
-	uint8_t tcpeth_send_data[10];
-	tcpeth_send_data[0] = 0x01;
-	tcpeth_send_data[1] = 0x30;
-	tcpeth_send_data[3] = '\0';
+//	uint8_t tcpeth_send_data[10];
+//	tcpeth_send_data[0] = 0x01;
+//	tcpeth_send_data[1] = 0x30;
+//	tcpeth_send_data[3] = '\0';
+
+
+	// status of netconn send
 	err_t tcp_send_data_status;
+
+	// data to be send
+	char eth_packet_data[200];
+	uint16_t eth_packet_data_len = 0;
+
+	// ethernet packet
+	Eth_Packet pacekt;
 
 	for(;;){
 
-		/* queue which contain dato to be send */
+		/* queue which contain ethernet packet to be send */
+
+
+		/* convert eth packet to tcp data array to be send */
+		pacekt.pacet_type = 49;
+		pacekt.data_length = 1;
+		pacekt.data[0] = 51;
+
+		convert_eth_packet_to_tcp_array(eth_packet_data, &eth_packet_data_len, &pacekt);
 
 
 		/* send data packet with netconn_write function */
+		tcp_send_data_status = netconn_write(newconn, eth_packet_data, eth_packet_data_len, NETCONN_COPY);
 
-
-		tcp_send_data_status = netconn_write(newconn, tcpeth_send_data, strlen(tcpeth_send_data), NETCONN_COPY);
-
-		sprintf(uart3_send, "Netconn write status: %d\n\r", tcp_send_data_status);
+		sprintf(uart3_send, "Netconn write status: %s \n\r", eth_packet_data);
 		HAL_UART_Transmit(&huart3, (uint8_t*) uart3_send, strlen(uart3_send), HAL_MAX_DELAY);
+
 
 		HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 		vTaskDelay(pdMS_TO_TICKS(1000));
