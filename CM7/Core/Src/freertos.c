@@ -256,9 +256,9 @@ void vTaskEthSendData(void * argument){
 
 
 		/* convert eth packet to tcp data array to be send */
-		pacekt.pacet_type = 49;
+		pacekt.pacet_type = motor_data_standard;
 		pacekt.data_length = 1;
-		pacekt.data[0] = 51;
+		pacekt.data[0] = 50;
 
 		convert_eth_packet_to_tcp_array(eth_packet_data, &eth_packet_data_len, &pacekt);
 
@@ -267,8 +267,8 @@ void vTaskEthSendData(void * argument){
 		tcp_send_data_status = netconn_write(newconn, eth_packet_data, eth_packet_data_len, NETCONN_COPY);
 
 
-		sprintf(uart3_send, "Netconn write status: %s \n\r", eth_packet_data);
-		HAL_UART_Transmit(&huart3, (uint8_t*) uart3_send, strlen(uart3_send), HAL_MAX_DELAY);
+//		sprintf(uart3_send, "Netconn write status: %s \n\r", eth_packet_data);
+//		HAL_UART_Transmit(&huart3, (uint8_t*) uart3_send, strlen(uart3_send), HAL_MAX_DELAY);
 
 
 		HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);

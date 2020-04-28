@@ -75,26 +75,26 @@ void convert_eth_packet_to_tcp_array(char * eth_packet_data, uint16_t * eth_data
 
 	uint16_t index = 0;
 	uint16_t checksum = 0;
-	(*eth_data_len) = 3 + 1 + 1 + eth_packet->data_length + 2 + 1;
+	(*eth_data_len) = (char)3 + 1 + 1 + eth_packet->data_length + 2 + 1;
 
-	*(eth_packet_data+index) = 's'; index++; checksum += 's';
-	*(eth_packet_data+index) = 'n';	index++; checksum += 'n';
-	*(eth_packet_data+index) = 'p'; index++; checksum += 'p';
-	*(eth_packet_data+index) = eth_packet->pacet_type; index++; checksum += *(eth_packet_data+index);  // packet type
-	*(eth_packet_data+index) = eth_packet->data_length; index++; checksum += *(eth_packet_data+index); // packet lenght
+	*(eth_packet_data+index) = 's'; index++; checksum += (int)'s';
+	*(eth_packet_data+index) = 'n';	index++; checksum += (int)'n';
+	*(eth_packet_data+index) = 'p'; index++; checksum += (int)'p';
+	*(eth_packet_data+index) = (char)eth_packet->pacet_type; index++; checksum += eth_packet->pacet_type;  // packet type
+	*(eth_packet_data+index) = (char)eth_packet->data_length; index++; checksum += eth_packet->data_length; // packet lenght
 
 	int i;
 	for(i = 0; i<eth_packet->data_length; i++){
-		*(eth_packet_data+index) = eth_packet->data[i]; index++; checksum += *(eth_packet_data+index); // add data from eth packet
+		*(eth_packet_data+index) = (char)eth_packet->data[i]; index++; checksum += eth_packet->data[i]; // add data from eth packet
 	}
 
 	/* Calculate checksum of the packet */
-	*(eth_packet_data+index) = (checksum>>8); index++;
-	*(eth_packet_data+index) = (checksum&0xFF); index++;
+	*(eth_packet_data+index) = (char)(checksum>>8); index++;
+	*(eth_packet_data+index) = (char)(checksum&0xFF); index++;
 
 	*(eth_packet_data+index) = '\0';
 
-	sprintf(uart3_send, "Calc_checksum: %s \n\r", eth_packet_data);
+	sprintf(uart3_send, "Calc_checksum: %d \n\r", checksum);
 	HAL_UART_Transmit(&huart3, (uint8_t*) uart3_send, strlen(uart3_send), HAL_MAX_DELAY);
 
 }

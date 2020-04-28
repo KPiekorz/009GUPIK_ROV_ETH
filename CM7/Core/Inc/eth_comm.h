@@ -45,10 +45,12 @@ typedef struct{
 
 }Eth_Packet;
 
+/*************** QT -> H7 ******************/
 
 /* function parse received ethernet packet */
 uint8_t parse_eth_command(char * eth_data, uint16_t eth_data_length, Eth_Packet * eth_packet);
 
+/*************** QT <- H7 ******************/
 
 /* function to construct send data packet sensor standard */
 void construct_eth_data_packet_sensor_standard(Eth_Packet * eth_packet); // tu trzeba dopisac pozostale dane wejsciowe
