@@ -19,20 +19,19 @@ enum{
 	eth_packet_ok = 1,
 	checksum_error,
 	no_packet_found
-};
+}Eth_packet_status_t;
 
 /* packet type for command packet */
 enum{
 	sensor_command  = 1,
 	motor_command
-};
+}Comand_packet_type_t;
 
 /* packet type for data packet */
 enum{
 	sensor_data_standart = 1,
 	motor_data_standard
-};
-
+}Data_packet_type_t;
 
 
 /* struct to hold packet variables */
